@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "fol-planner": {
+      "command": "py",
+      "args": ["-m", "planner.mcp_server"]
+    }
+  }
+}

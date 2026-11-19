@@ -1,0 +1,23 @@
+# BlocksWorld / AboveGoal
+# found by A*, h = hmax
+# steps: 4, cost: 4
+# validation: valid plan: 4 steps, cost 4; every precondition, axiom and constraint holds and the goal is reached
+
+Unstack(A, B)
+PutDown(A)
+Unstack(E, C)
+Stack(E, A)
+
+# Trace (+ added, - deleted facts):
+#   1. Unstack(A, B)
+#        + Clear(B), Holding(A)
+#        - Clear(A), HandEmpty, On(A, B)
+#   2. PutDown(A)
+#        + Clear(A), HandEmpty, OnTable(A)
+#        - Holding(A)
+#   3. Unstack(E, C)
+#        + Clear(C), Holding(E)
+#        - Clear(E), HandEmpty, On(E, C)
+#   4. Stack(E, A)
+#        + Clear(E), HandEmpty, On(E, A)
+#        - Clear(A), Holding(E)

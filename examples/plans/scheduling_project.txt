@@ -1,0 +1,31 @@
+# TaskScheduling / WebProject
+# found by A*, h = hmax
+# steps: 8, cost: 37
+# validation: valid plan: 8 steps, cost 37; every precondition, axiom and constraint holds and the goal is reached
+
+Perform(Design, Ana)
+Perform(Database, Bogdan)
+Train(Dan, Python)
+Perform(Backend, Dan)
+Perform(Frontend, Carmen)
+Perform(Docs, Carmen)
+Perform(Testing, Dan)
+Perform(Deploy, Ana)
+
+# Trace (+ added, - deleted facts):
+#   1. Perform(Design, Ana)
+#        + Done(Design), DoneBy(Design, Ana)
+#   2. Perform(Database, Bogdan)
+#        + Done(Database), DoneBy(Database, Bogdan)
+#   3. Train(Dan, Python)
+#        + HasSkill(Dan, Python)
+#   4. Perform(Backend, Dan)
+#        + Done(Backend), DoneBy(Backend, Dan)
+#   5. Perform(Frontend, Carmen)
+#        + Done(Frontend), DoneBy(Frontend, Carmen)
+#   6. Perform(Docs, Carmen)
+#        + Done(Docs), DoneBy(Docs, Carmen)
+#   7. Perform(Testing, Dan)
+#        + Done(Testing), DoneBy(Testing, Dan)
+#   8. Perform(Deploy, Ana)
+#        + Done(Deploy), DoneBy(Deploy, Ana)

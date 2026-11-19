@@ -1,0 +1,21 @@
+# Eight blocks in three towers, rearranged into two different towers.
+# Too large for uninformed search within the default limits; used to
+# compare heuristics.
+#
+#   H                       A    E
+#   C    G                  B    F
+#   A    E    D     ->      C    G
+#   B    F                  D    H
+
+problem Large8
+domain: BlocksWorld
+
+objects: A, B, C, D, E, F, G, H : Block
+
+init: On(H, C), On(C, A), On(A, B), OnTable(B), Clear(H),
+      On(G, E), On(E, F), OnTable(F), Clear(G),
+      OnTable(D), Clear(D),
+      HandEmpty
+
+goal: On(A, B) & On(B, C) & On(C, D) & OnTable(D) &
+      On(E, F) & On(F, G) & On(G, H) & OnTable(H)

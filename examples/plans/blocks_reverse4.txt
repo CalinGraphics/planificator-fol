@@ -1,0 +1,39 @@
+# BlocksWorld / ReverseTower4
+# found by A*, h = hmax
+# steps: 8, cost: 8
+# validation: valid plan: 8 steps, cost 8; every precondition, axiom and constraint holds and the goal is reached
+
+Unstack(A, B)
+PutDown(A)
+Unstack(B, C)
+Stack(B, A)
+Unstack(C, D)
+Stack(C, B)
+PickUp(D)
+Stack(D, C)
+
+# Trace (+ added, - deleted facts):
+#   1. Unstack(A, B)
+#        + Clear(B), Holding(A)
+#        - Clear(A), HandEmpty, On(A, B)
+#   2. PutDown(A)
+#        + Clear(A), HandEmpty, OnTable(A)
+#        - Holding(A)
+#   3. Unstack(B, C)
+#        + Clear(C), Holding(B)
+#        - Clear(B), HandEmpty, On(B, C)
+#   4. Stack(B, A)
+#        + Clear(B), HandEmpty, On(B, A)
+#        - Clear(A), Holding(B)
+#   5. Unstack(C, D)
+#        + Clear(D), Holding(C)
+#        - Clear(C), HandEmpty, On(C, D)
+#   6. Stack(C, B)
+#        + Clear(C), HandEmpty, On(C, B)
+#        - Clear(B), Holding(C)
+#   7. PickUp(D)
+#        + Holding(D)
+#        - Clear(D), HandEmpty, OnTable(D)
+#   8. Stack(D, C)
+#        + Clear(D), HandEmpty, On(D, C)
+#        - Clear(C), Holding(D)

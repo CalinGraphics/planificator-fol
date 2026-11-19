@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fol-planner"
+version = "1.0.0"
+description = "A planner that combines first-order logic knowledge representation with state-space search."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+planner = "planner.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["planner*"]

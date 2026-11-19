@@ -1,0 +1,16 @@
+# The Sussman anomaly: achieving the two goals one after the other fails,
+# the planner has to interleave them.
+#
+#     C
+#     A   B          A
+#   ---------   ->   B
+#                    C
+
+problem SussmanAnomaly
+domain: BlocksWorld
+
+objects: A, B, C : Block
+
+init: On(C, A), OnTable(A), OnTable(B), Clear(C), Clear(B), HandEmpty
+
+goal: On(A, B) & On(B, C)

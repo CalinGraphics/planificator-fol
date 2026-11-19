@@ -1,0 +1,48 @@
+# Task scheduling for a small team.
+# Each task needs some skills and may depend on other tasks. A worker can
+# perform a task only if they have every required skill and all its
+# prerequisites are done. A worker can also be trained in a skill they are
+# able to learn, by a colleague who already has it. Costs are hours of
+# work, so the cheapest plan is the one with the least total effort.
+
+domain TaskScheduling
+
+types: Task, Worker, Skill
+
+predicates:
+    Requires(t, s),      # task t needs skill s
+    HasSkill(w, s),
+    CanLearn(w, s),      # w is able to be trained in s
+    DependsOn(t, p),     # t can start only after p is done
+    Done(t),
+    DoneBy(t, w),
+    Precedes(p, t)       # derived: p must come (directly or not) before t
+
+# --- Horn rules ------------------------------------------------------------
+derive: DependsOn(t, p) -> Precedes(p, t)
+derive: DependsOn(t, p) & Precedes(q, p) -> Precedes(q, t)
+
+# --- Axioms (invariants of the knowledge base) ----------------------------
+axiom: forall t: ~Precedes(t, t)                     # no cyclic dependencies
+axiom: forall t, p: Done(t) & Precedes(p, t) -> Done(p)
+axiom: forall t: Done(t) <-> (exists w: DoneBy(t, w))
+
+# --- Constraint (enforced during search) ----------------------------------
+# Nobody performs more than two tasks: FOL can express counting with
+# distinct witnesses.
+constraint: ~(exists w, t1, t2, t3:
+                 DoneBy(t1, w) & DoneBy(t2, w) & DoneBy(t3, w)
+                 & t1 != t2 & t1 != t3 & t2 != t3)
+
+# --- Actions --------------------------------------------------------------
+action Perform(t: Task, w: Worker)
+    pre: ~Done(t)
+         & (forall s: Requires(t, s) -> HasSkill(w, s))
+         & (forall p: DependsOn(t, p) -> Done(p))
+    eff: Done(t) & DoneBy(t, w)
+    cost: Size(t) * Rate(w)
+
+action Train(w: Worker, s: Skill)
+    pre: CanLearn(w, s) & ~HasSkill(w, s) & (exists m: HasSkill(m, s) & m != w)
+    eff: HasSkill(w, s)
+    cost: TrainingHours(s)

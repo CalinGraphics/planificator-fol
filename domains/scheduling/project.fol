@@ -1,0 +1,48 @@
+# A web application project with seven tasks and four people.
+#
+#   Design --> Database --> Backend --> Testing --> Deploy
+#      \                      ^           ^          ^
+#       `-------------------> Frontend ---'---> Docs '
+
+problem WebProject
+domain: TaskScheduling
+
+objects: Design, Database, Backend, Frontend, Testing, Docs, Deploy : Task;
+         Ana, Bogdan, Carmen, Dan : Worker;
+         Architecture, SQL, Python, Web, QA, Writing, DevOps : Skill
+
+init:
+    Requires(Design, Architecture),
+    Requires(Database, SQL),
+    Requires(Backend, Python),
+    Requires(Frontend, Web),
+    Requires(Testing, QA),
+    Requires(Docs, Writing),
+    Requires(Deploy, DevOps),
+
+    DependsOn(Database, Design),
+    DependsOn(Backend, Database),
+    DependsOn(Frontend, Design),
+    DependsOn(Testing, Backend),
+    DependsOn(Testing, Frontend),
+    DependsOn(Docs, Frontend),
+    DependsOn(Deploy, Testing),
+    DependsOn(Deploy, Docs),
+
+    HasSkill(Ana, Architecture), HasSkill(Ana, SQL), HasSkill(Ana, DevOps),
+    HasSkill(Bogdan, Python), HasSkill(Bogdan, SQL),
+    HasSkill(Carmen, Web), HasSkill(Carmen, Writing),
+    HasSkill(Dan, QA),
+
+    CanLearn(Dan, Python), CanLearn(Dan, Web), CanLearn(Carmen, QA),
+    CanLearn(Bogdan, DevOps), CanLearn(Bogdan, Web)
+
+values:
+    Size(Design) = 3, Size(Database) = 2, Size(Backend) = 5, Size(Frontend) = 4,
+    Size(Testing) = 2, Size(Docs) = 1, Size(Deploy) = 1,
+    Rate(Ana) = 3, Rate(Bogdan) = 2, Rate(Carmen) = 2, Rate(Dan) = 1,
+    TrainingHours(Architecture) = 6, TrainingHours(SQL) = 3, TrainingHours(Python) = 4,
+    TrainingHours(Web) = 3, TrainingHours(QA) = 2, TrainingHours(Writing) = 1,
+    TrainingHours(DevOps) = 3
+
+goal: forall t: Task(t) -> Done(t)

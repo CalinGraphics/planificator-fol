@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Local tools and editors
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Presentation: kept locally, not published on GitHub
+prezentare/
+*.pptx
+*.ppt
+*.key
+
+# Plans written while experimenting (the curated ones live in examples/plans/)
+*.plan

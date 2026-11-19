@@ -1,0 +1,31 @@
+# BlocksWorld / SingleTower
+# found by A*, h = hmax
+# steps: 6, cost: 6
+# validation: valid plan: 6 steps, cost 6; every precondition, axiom and constraint holds and the goal is reached
+
+Unstack(C, A)
+Stack(C, D)
+PickUp(A)
+Stack(A, C)
+PickUp(B)
+Stack(B, A)
+
+# Trace (+ added, - deleted facts):
+#   1. Unstack(C, A)
+#        + Clear(A), Holding(C)
+#        - Clear(C), HandEmpty, On(C, A)
+#   2. Stack(C, D)
+#        + Clear(C), HandEmpty, On(C, D)
+#        - Clear(D), Holding(C)
+#   3. PickUp(A)
+#        + Holding(A)
+#        - Clear(A), HandEmpty, OnTable(A)
+#   4. Stack(A, C)
+#        + Clear(A), HandEmpty, On(A, C)
+#        - Clear(C), Holding(A)
+#   5. PickUp(B)
+#        + Holding(B)
+#        - Clear(B), HandEmpty, OnTable(B)
+#   6. Stack(B, A)
+#        + Clear(B), HandEmpty, On(B, A)
+#        - Clear(A), Holding(B)

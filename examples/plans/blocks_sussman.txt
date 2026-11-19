@@ -1,0 +1,31 @@
+# BlocksWorld / SussmanAnomaly
+# found by A*, h = hmax
+# steps: 6, cost: 6
+# validation: valid plan: 6 steps, cost 6; every precondition, axiom and constraint holds and the goal is reached
+
+Unstack(C, A)
+PutDown(C)
+PickUp(B)
+Stack(B, C)
+PickUp(A)
+Stack(A, B)
+
+# Trace (+ added, - deleted facts):
+#   1. Unstack(C, A)
+#        + Clear(A), Holding(C)
+#        - Clear(C), HandEmpty, On(C, A)
+#   2. PutDown(C)
+#        + Clear(C), HandEmpty, OnTable(C)
+#        - Holding(C)
+#   3. PickUp(B)
+#        + Holding(B)
+#        - Clear(B), HandEmpty, OnTable(B)
+#   4. Stack(B, C)
+#        + Clear(B), HandEmpty, On(B, C)
+#        - Clear(C), Holding(B)
+#   5. PickUp(A)
+#        + Holding(A)
+#        - Clear(A), HandEmpty, OnTable(A)
+#   6. Stack(A, B)
+#        + Clear(A), HandEmpty, On(A, B)
+#        - Clear(B), Holding(A)

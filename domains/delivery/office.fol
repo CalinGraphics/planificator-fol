@@ -1,0 +1,28 @@
+# Map:
+#
+#   Office --- Hall --- Lab --- Vault (locked, opened by VaultKey)
+#               |
+#            Storage
+#
+# The robot starts in the Hall. VaultKey lies in the Office.
+#   Parcel  : Storage -> Lab
+#   Sample  : Vault   -> Office
+#   Vase    : Lab     -> Storage   (fragile: carried alone)
+
+problem OfficeDelivery
+domain: RobotDelivery
+
+objects: Hall, Office, Lab, Storage, Vault : Room;
+         Parcel, Sample, Vase : Package;
+         VaultKey : Key;
+         Left, Right : Gripper
+
+init:
+    Door(Hall, Office), Door(Hall, Lab), Door(Hall, Storage), Door(Lab, Vault),
+    RobotAt(Hall), Free(Left), Free(Right),
+    Locked(Vault), Opens(VaultKey, Vault), At(VaultKey, Office),
+    At(Parcel, Storage), At(Sample, Vault), At(Vase, Lab),
+    Fragile(Vase),
+    Destination(Parcel, Lab), Destination(Sample, Office), Destination(Vase, Storage)
+
+goal: forall p: Package(p) -> (exists r: Destination(p, r) & At(p, r))

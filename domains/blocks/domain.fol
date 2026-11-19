@@ -1,0 +1,43 @@
+# Blocks World — the four-operator version (Russell & Norvig, ch. 11).
+# A robot hand moves blocks one at a time; a block can be moved only if
+# nothing is on top of it.
+
+domain BlocksWorld
+
+types: Block
+
+predicates:
+    On(x, y),        # block x sits directly on block y
+    OnTable(x),
+    Clear(x),        # nothing is on x
+    Holding(x),
+    HandEmpty,
+    Above(x, y)      # derived: x is somewhere in the tower above y
+
+# --- Horn rules (derived predicate, transitive closure of On) --------------
+derive: On(x, y) -> Above(x, y)
+derive: On(x, y) & Above(y, z) -> Above(x, z)
+
+# --- State axioms: true in every reachable state --------------------------
+axiom: forall x, y: On(x, y) -> ~Clear(y)
+axiom: forall x, y, z: On(x, y) & On(x, z) -> y = z
+axiom: forall x: ~Above(x, x)
+axiom: forall x: Holding(x) -> ~HandEmpty
+axiom: forall x: Block(x) -> OnTable(x) | Holding(x) | (exists y: On(x, y))
+
+# --- Actions --------------------------------------------------------------
+action PickUp(x: Block)
+    pre: Clear(x) & OnTable(x) & HandEmpty
+    eff: Holding(x) & ~Clear(x) & ~OnTable(x) & ~HandEmpty
+
+action PutDown(x: Block)
+    pre: Holding(x)
+    eff: OnTable(x) & Clear(x) & HandEmpty & ~Holding(x)
+
+action Stack(x: Block, y: Block)
+    pre: Holding(x) & Clear(y) & x != y
+    eff: On(x, y) & Clear(x) & HandEmpty & ~Holding(x) & ~Clear(y)
+
+action Unstack(x: Block, y: Block)
+    pre: On(x, y) & Clear(x) & HandEmpty
+    eff: Holding(x) & Clear(y) & ~On(x, y) & ~Clear(x) & ~HandEmpty

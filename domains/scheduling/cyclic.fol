@@ -1,0 +1,26 @@
+# An inconsistent knowledge base: Backend and Testing depend on each other
+# through Integration. The rules derive Precedes(Backend, Backend), which
+# violates the axiom  forall t: ~Precedes(t, t), so the planner rejects the
+# problem before searching.
+
+problem CyclicDependencies
+domain: TaskScheduling
+
+objects: Backend, Integration, Testing : Task;
+         Bogdan, Dan : Worker;
+         Python, QA : Skill
+
+init:
+    Requires(Backend, Python), Requires(Integration, Python), Requires(Testing, QA),
+    DependsOn(Integration, Backend),
+    DependsOn(Testing, Integration),
+    DependsOn(Backend, Testing),
+    HasSkill(Bogdan, Python), HasSkill(Dan, QA),
+    CanLearn(Dan, Python)
+
+values:
+    Size(Backend) = 5, Size(Integration) = 2, Size(Testing) = 2,
+    Rate(Bogdan) = 2, Rate(Dan) = 1,
+    TrainingHours(Python) = 4, TrainingHours(QA) = 2
+
+goal: forall t: Task(t) -> Done(t)

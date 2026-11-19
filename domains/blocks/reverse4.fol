@@ -1,0 +1,15 @@
+# Reverse a tower of four blocks.
+#
+#   A            D
+#   B            C
+#   C     ->     B
+#   D            A
+
+problem ReverseTower4
+domain: BlocksWorld
+
+objects: A, B, C, D : Block
+
+init: On(A, B), On(B, C), On(C, D), OnTable(D), Clear(A), HandEmpty
+
+goal: On(D, C) & On(C, B) & On(B, A) & OnTable(A)

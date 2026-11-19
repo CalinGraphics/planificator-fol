@@ -1,0 +1,14 @@
+# A goal stated with the derived predicate Above and a quantifier.
+# "E must end up somewhere above A, and B must be on the table with
+#  nothing on it" — the planner decides how tall the tower is.
+
+problem AboveGoal
+domain: BlocksWorld
+
+objects: A, B, C, D, E : Block
+
+init: On(A, B), OnTable(B), Clear(A),
+      On(E, C), On(C, D), OnTable(D), Clear(E),
+      HandEmpty
+
+goal: Above(E, A) & OnTable(B) & Clear(B)

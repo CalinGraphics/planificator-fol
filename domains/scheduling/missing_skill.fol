@@ -1,0 +1,23 @@
+# No plan exists: the audit needs the Security skill, nobody has it and
+# nobody can teach it. The relaxed reachability analysis behind the
+# heuristics proves this before a single node is expanded.
+
+problem MissingSkill
+domain: TaskScheduling
+
+objects: Backend, Audit : Task;
+         Bogdan, Dan : Worker;
+         Python, Security : Skill
+
+init:
+    Requires(Backend, Python), Requires(Audit, Security),
+    DependsOn(Audit, Backend),
+    HasSkill(Bogdan, Python),
+    CanLearn(Dan, Python), CanLearn(Dan, Security)
+
+values:
+    Size(Backend) = 5, Size(Audit) = 3,
+    Rate(Bogdan) = 2, Rate(Dan) = 1,
+    TrainingHours(Python) = 4, TrainingHours(Security) = 8
+
+goal: forall t: Task(t) -> Done(t)

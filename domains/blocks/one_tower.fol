@@ -1,0 +1,12 @@
+# A universally quantified goal: build a single tower with D at the bottom.
+# The order of the other blocks is not specified; the planner picks one.
+
+problem SingleTower
+domain: BlocksWorld
+
+objects: A, B, C, D : Block
+
+init: OnTable(A), OnTable(B), On(C, A), OnTable(D), Clear(B), Clear(C), Clear(D),
+      HandEmpty
+
+goal: OnTable(D) & (forall x: Block(x) & x != D -> Above(x, D))

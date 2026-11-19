@@ -1,0 +1,55 @@
+# A delivery robot with two grippers moves items between rooms.
+# Some rooms are locked and can be opened with the right key, which the
+# robot first has to fetch. A fragile item must be carried alone.
+
+domain RobotDelivery
+
+types: Room, Package, Key, Gripper
+
+predicates:
+    Door(x, y),          # a door between rooms x and y (listed once)
+    Connected(x, y),     # derived: doors work both ways
+    Item(x),             # derived: packages and keys can be carried
+    RobotAt(r),
+    At(i, r),            # item i lies in room r
+    Holds(g, i),
+    Free(g),
+    Locked(r),
+    Opens(k, r),
+    Fragile(i),
+    Destination(p, r),
+    Reachable(x, y)      # derived: y can be reached from x through unlocked rooms
+
+# --- Horn rules ------------------------------------------------------------
+derive: Door(x, y) -> Connected(x, y)
+derive: Door(x, y) -> Connected(y, x)
+derive: Package(x) -> Item(x)
+derive: Key(x) -> Item(x)
+derive: Connected(x, y) & ~Locked(y) -> Reachable(x, y)
+derive: Reachable(x, y) & Connected(y, z) & ~Locked(z) -> Reachable(x, z)
+
+# --- Axioms ----------------------------------------------------------------
+axiom: forall r1, r2: RobotAt(r1) & RobotAt(r2) -> r1 = r2
+axiom: forall g: Gripper(g) -> (Free(g) <-> ~(exists i: Holds(g, i)))
+axiom: forall i, r: At(i, r) -> ~(exists g: Holds(g, i))
+
+# --- Constraint: a fragile item is never carried together with another one
+constraint: ~(exists g, h, p, q: Holds(g, p) & Fragile(p) & Holds(h, q) & p != q)
+
+# --- Actions --------------------------------------------------------------
+action Move(from: Room, to: Room)
+    pre: RobotAt(from) & Connected(from, to) & ~Locked(to)
+    eff: RobotAt(to) & ~RobotAt(from)
+
+action Pick(i: Item, r: Room, g: Gripper)
+    pre: RobotAt(r) & At(i, r) & Free(g)
+    eff: Holds(g, i) & ~At(i, r) & ~Free(g)
+
+action Drop(i: Item, r: Room, g: Gripper)
+    pre: RobotAt(r) & Holds(g, i)
+    eff: At(i, r) & Free(g) & ~Holds(g, i)
+
+action Unlock(r: Room, from: Room, k: Key)
+    pre: RobotAt(from) & Connected(from, r) & Locked(r) & Opens(k, r)
+         & (exists g: Holds(g, k))
+    eff: ~Locked(r)
